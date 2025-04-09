@@ -3,7 +3,7 @@ import React from "react";
 
 import planeScene from "../assets/3d/plane.glb";
 
-const Plane = () => {
+const Plane: React.FC = () => {
     const { scene, animations } = useGLTF(planeScene);
     return (
         <mesh>

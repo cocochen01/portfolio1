@@ -11,9 +11,9 @@ import Plane from '../models/Plane';
 const Home = () => {
     const [isRotating, setIsRotating] = useState(false);
     const adjustIslandForScreenSize = () => {
-        let screenScale: number[] = [];
-        let screenPosition: number[] = [0, -6.5, -43.4];
-        let rotation: number[] = [0.1, 4.7, 0];
+        let screenScale: [number, number, number] = [0, 0, 0];
+        let screenPosition: [number, number, number] = [0, -6.5, -43.4];
+        let rotation: [number, number, number] = [0.1, 4.7, 0];
     
         if (window.innerWidth < 768) {
           screenScale = [0.9, 0.9, 0.9];

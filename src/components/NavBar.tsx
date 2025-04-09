@@ -1,6 +1,6 @@
 import { NavLink } from "react-router-dom";
 
-const Navbar = () => {
+const Navbar: React.FC = () => {
     return (
         <header className="header">
             <NavLink to="/portfolio1/" className="w-10 h-10 rounded-lg bg-white items-center justify-center flex font-bold shadow-md">

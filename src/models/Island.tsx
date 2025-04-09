@@ -10,15 +10,38 @@ import { a } from "@react-spring/three";
 import { useEffect, useRef } from "react";
 import { useGLTF } from "@react-three/drei";
 import { useFrame, useThree } from "@react-three/fiber";
+import { Group, Mesh, BufferGeometry, Material } from "three";
+
+import * as THREE from 'three'
+import { GLTF } from 'three-stdlib'
 
 import islandScene from "../assets/3d/island.glb";
 
-const Island = (props) => {
-  const islandRef = useRef()
+type GLTFResult = GLTF & {
+  nodes: Record<string, THREE.Mesh>;
+  materials: Record<string, THREE.Material>;
+};
+type IslandProps = {
+  position: number[];
+  scale: number[];
+  rotation: number[];
+  isRotating: boolean;
+  setIsRotating: (value: boolean) => void;
+};
 
-  const { nodes, materials } = useGLTF(islandScene)
+
+const Island: React.FC<IslandProps> = ({
+  position,
+  scale,
+  rotation,
+  isRotating,
+  setIsRotating,
+}) => {
+  const islandRef = useRef<Group>(null);
+
+  const { nodes, materials } = useGLTF(islandScene) as GLTFResult;
   return (
-    <a.group ref = {islandRef} {...props}>
+    <a.group ref = {islandRef} position={position} scale={scale} rotation={rotation}>
       <mesh
         geometry={nodes.polySurface944_tree_body_0.geometry}
         material={materials.PaletteMaterial001}

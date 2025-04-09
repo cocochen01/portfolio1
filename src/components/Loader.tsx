@@ -1,6 +1,6 @@
 import { Html } from '@react-three/drei'
 
-const Loader = () => {
+const Loader: React.FC = () => {
     return (
         <Html>
             <div className="flex justify-center items-center">
