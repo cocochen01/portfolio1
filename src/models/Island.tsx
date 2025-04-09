@@ -9,7 +9,7 @@ Title: Fox's islands
 import { a } from "@react-spring/three";
 import { useEffect, useRef } from "react";
 import { useGLTF } from "@react-three/drei";
-import { useFrame, useThree } from "@react-three/fiber";
+import { ThreeEvent, useFrame, useThree } from "@react-three/fiber";
 import { Group, Mesh, BufferGeometry, Material } from "three";
 
 import * as THREE from 'three'
@@ -21,27 +21,106 @@ type GLTFResult = GLTF & {
   nodes: Record<string, THREE.Mesh>;
   materials: Record<string, THREE.Material>;
 };
+
 type IslandProps = {
-  position: number[];
-  scale: number[];
-  rotation: number[];
+  position: [number, number, number];
+  scale: [number, number, number];
+  rotation: [number, number, number];
   isRotating: boolean;
-  setIsRotating: (value: boolean) => void;
+  setIsRotating: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
+export function adjustIslandForScreenSize(): [number, number, number][] {
+  let screenScale: [number, number, number] = [0, 0, 0];
+  let screenPosition: [number, number, number] = [0, -6.5, -43.4];
+  let rotation: [number, number, number] = [0.1, 4.7, 0];
+  if (window.innerWidth < 768) {
+    screenScale = [0.9, 0.9, 0.9];
+  } else {
+    screenScale = [1, 1, 1];
+  }
 
-const Island: React.FC<IslandProps> = ({
-  position,
-  scale,
-  rotation,
-  isRotating,
-  setIsRotating,
-}) => {
+  return [screenScale, screenPosition, rotation];
+};
+
+export function Island(props: IslandProps): JSX.Element {
   const islandRef = useRef<Group>(null);
-
+  const { gl, viewport } = useThree();
   const { nodes, materials } = useGLTF(islandScene) as GLTFResult;
+
+  const lastX = useRef(0);
+  const rotationSpeed = useRef(0);
+  const dampingFactor = 0.95;
+
+  const handlePointerDown = (event: any) => {
+    event.stopPropagation();
+    event.preventDefault();
+    setIsRotating(true);
+
+    const clientX = event.touches ? event.touches[0].clientX : event.clientX;
+    lastX.current = clientX;
+  }
+  const handlePointerUp = (event: any) => {
+    event.stopPropagation();
+    event.preventDefault();
+    setIsRotating(false);
+
+    const clientX = event.touches ? event.touches[0].clientX : event.clientX;
+    const delta = (clientX - lastX.current) / viewport.width;
+
+    if (islandRef.current) {
+      islandRef.current.rotation.y += delta * Math.PI * 0.01;
+    }
+    lastX.current = clientX;
+    rotationSpeed.current = delta * Math.PI * 0.01;
+  }
+  const handlePointerMove = (event: any) => {
+    event.stopPropagation();
+    event.preventDefault();
+    if (isRotating) {
+      handlePointerUp(event);
+    }
+  }
+  const handleKeyDown = (event: KeyboardEvent) => {
+    if (event.key === 'ArrowLeft') {
+      if (!isRotating) {
+        setIsRotating(true);
+        if (islandRef.current) {
+          islandRef.current.rotation.y -= Math.PI * 0.01;
+        }
+      }
+    } else if (event.key === 'ArrowRight') {
+      if (!isRotating) {
+        setIsRotating(true);
+        if (islandRef.current) {
+          islandRef.current.rotation.y += Math.PI * 0.01;
+        }
+      }
+    }
+  }
+  const handleKeyUp = (event: KeyboardEvent) => {
+    if (event.key === 'ArrowLeft' || event.key === 'ArrowRight') {
+      setIsRotating(false);
+    }
+  }
+  useEffect(() => {
+    document.addEventListener('pointerdown', handlePointerDown);
+    document.addEventListener('pointerup', handlePointerUp);
+    document.addEventListener('pointermove', handlePointerMove);
+    document.addEventListener('keydown', handleKeyDown);
+    document.addEventListener('keyup', handleKeyUp);
+    return () => {
+      document.removeEventListener('pointerdown', handlePointerDown);
+      document.removeEventListener('pointerup', handlePointerUp);
+      document.removeEventListener('pointermove', handlePointerMove);
+      document.removeEventListener('keydown', handleKeyDown);
+      document.removeEventListener('keyup', handleKeyUp);
+    };
+  }, [gl, handlePointerDown, handlePointerUp, handlePointerMove]);
+
+  const { isRotating, setIsRotating, ...groupProps } = props;
   return (
-    <a.group ref = {islandRef} position={position} scale={scale} rotation={rotation}>
+    <a.group ref = {islandRef} {...groupProps}>
       <mesh
         geometry={nodes.polySurface944_tree_body_0.geometry}
         material={materials.PaletteMaterial001}
@@ -73,5 +152,3 @@ const Island: React.FC<IslandProps> = ({
     </a.group>
   )
 }
-
-export default Island;

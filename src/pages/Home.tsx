@@ -3,27 +3,15 @@ import { Canvas } from '@react-three/fiber';
 import { useState, Suspense } from 'react';
 import Loader from '../components/Loader';
 
-import Island from '../models/Island';
-import Sky from '../models/Sky';
+import { adjustIslandForScreenSize, Island } from '../models/Island';
+import { Sky } from '../models/Sky';
 import { Bird } from '../models/Bird';
-import Plane from '../models/Plane';
+import { adjustPlaneForScreenSize, Plane } from '../models/Plane';
 
 const Home = () => {
     const [isRotating, setIsRotating] = useState(false);
-    const adjustIslandForScreenSize = () => {
-        let screenScale: [number, number, number] = [0, 0, 0];
-        let screenPosition: [number, number, number] = [0, -6.5, -43.4];
-        let rotation: [number, number, number] = [0.1, 4.7, 0];
-    
-        if (window.innerWidth < 768) {
-          screenScale = [0.9, 0.9, 0.9];
-        } else {
-          screenScale = [1, 1, 1];
-        }
-    
-        return [screenScale, screenPosition, rotation];
-      };
-    const [islandScreenScale, islandScreenPosition, islandRotation] = adjustIslandForScreenSize();
+    const [islandScale, islandScreenPosition, islandRotation] = adjustIslandForScreenSize();
+    const [planeScale, planePosition, planeRotation] = adjustPlaneForScreenSize();
     return (
         <section className="w-full h-screen relative">
             <Canvas
@@ -49,12 +37,17 @@ const Home = () => {
                     <Sky />
                     <Island
                         position={islandScreenPosition}
-                        scale={islandScreenScale}
+                        scale={islandScale}
                         rotation={islandRotation}
                         isRotating={isRotating}
                         setIsRotating={setIsRotating}
                     />
-                    <Plane />
+                    <Plane 
+                        scale={planeScale}
+                        position={planePosition}
+                        rotation={planeRotation}
+                        isRotating={isRotating}
+                    />
                 </Suspense>
             </Canvas>
         </section>

@@ -3,7 +3,7 @@ import React from "react";
 
 import skyScene from "../assets/3d/sky.glb";
 
-const Sky: React.FC = () => {
+export function Sky(): JSX.Element {
     const sky = useGLTF(skyScene);
     return (
         <mesh>
@@ -11,5 +11,3 @@ const Sky: React.FC = () => {
         </mesh>
     );
 }
-
-export default Sky;
