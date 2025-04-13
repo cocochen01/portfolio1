@@ -4,24 +4,33 @@ import { useFrame } from "@react-three/fiber";
 import * as THREE from "three";
 
 import skyScene from "../assets/3d/sky.glb";
+import { useInput } from "../hooks/useInput"; // adjust path as needed
 
-type SkyProps = {
-    isRotating: boolean;
-  };
+export function Sky(): JSX.Element {
+  const sky = useGLTF(skyScene);
+  const skyRef = useRef<THREE.Object3D>(null);
+  const { getSpeed, isRotating } = useInput();
+  const dampingFactor = 0.9;
+  const speedRef = useRef(0);
 
-export function Sky(props: SkyProps): JSX.Element {
-    const { isRotating } = props;
-    const sky = useGLTF(skyScene);
-    const skyRef = useRef<THREE.Object3D>(null);
+  useFrame(() => {
+    if (!skyRef.current) return;
 
-    useFrame((_, delta) => {
-        if (isRotating && skyRef.current) {
-            skyRef.current.rotation.y += .15 * delta;
-        }
-    })
-    return (
-        <mesh>
-            <primitive object={sky.scene} ref={skyRef}/>
-        </mesh>
-    );
+    let speed = getSpeed();
+
+    if (!isRotating) {
+      speedRef.current *= dampingFactor;
+      if (Math.abs(speedRef.current) < 0.001) speedRef.current = 0;
+    } else {
+      speedRef.current = speed;
+    }
+
+    skyRef.current.rotation.y += speedRef.current;
+  });
+
+  return (
+    <mesh>
+      <primitive object={sky.scene} ref={skyRef} />
+    </mesh>
+  );
 }

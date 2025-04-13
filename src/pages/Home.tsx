@@ -36,14 +36,14 @@ const Home = () => {
                     />
                     <Bird />
                     <Sky 
-                        isRotating={isRotating}
+                        // isRotating={isRotating}
                     />
                     <Island
                         position={islandScreenPosition}
                         scale={islandScale}
                         rotation={islandRotation}
-                        isRotating={isRotating}
-                        setIsRotating={setIsRotating}
+                        // isRotating={isRotating}
+                        // setIsRotating={setIsRotating}
                         setCurrentStage={setCurrentStage}
                     />
                     <Plane 

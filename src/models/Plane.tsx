@@ -34,7 +34,7 @@ export function Plane(props: PlaneProps): JSX.Element {
 
 
     useEffect(() => {
-        console.log(Object.keys(actions));
+        // console.log(Object.keys(actions));
         if (isRotating) {
             actions["Take 001"]?.play();
         } else {
@@ -44,8 +44,6 @@ export function Plane(props: PlaneProps): JSX.Element {
 
     return (
         <mesh {...groupProps}>
-          // use the primitive element when you want to directly embed a complex 3D
-          model or scene
           <primitive object={scene} ref={ref} />
         </mesh>
       );
