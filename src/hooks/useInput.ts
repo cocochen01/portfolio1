@@ -7,7 +7,7 @@ export function useInput() {
   const [isRotating, setIsRotating] = useState(false);
   const rotationSpeed = useRef(0);
   const lastX = useRef(0);
-  
+
   const inputSource = useRef<"mouse" | "keyboard" | null>(null);
 
   const getSpeed = () => rotationSpeed.current;
@@ -47,7 +47,7 @@ export function useInput() {
       if (event.key === "ArrowLeft" || event.key === "ArrowRight") {
         inputSource.current = "keyboard";
         setIsRotating(true);
-        rotationSpeed.current = (event.key === "ArrowLeft" ? 0.5 : -0.5) * 0.01;
+        rotationSpeed.current = (event.key === "ArrowLeft" ? 1 : -1) * 0.2 * 0.01;
       }
     };
 

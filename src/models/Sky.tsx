@@ -4,7 +4,7 @@ import { useFrame } from "@react-three/fiber";
 import * as THREE from "three";
 
 import skyScene from "../assets/3d/sky.glb";
-import { useInput } from "../hooks/useInput"; // adjust path as needed
+import { useInput } from "../hooks/useInput";
 
 export function Sky(): JSX.Element {
   const sky = useGLTF(skyScene);
@@ -25,7 +25,7 @@ export function Sky(): JSX.Element {
       speedRef.current = speed;
     }
 
-    skyRef.current.rotation.y += speedRef.current;
+    skyRef.current.rotation.y += (speedRef.current/6);
   });
 
   return (
