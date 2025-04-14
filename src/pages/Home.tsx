@@ -1,4 +1,3 @@
-import React from 'react';
 import { Canvas } from '@react-three/fiber';
 import { useState, Suspense } from 'react';
 import Loader from '../components/Loader';
@@ -7,6 +6,7 @@ import { adjustIslandForScreenSize, Island } from '../models/Island';
 import { Sky } from '../models/Sky';
 import { Bird } from '../models/Bird';
 import { adjustPlaneForScreenSize, Plane } from '../models/Plane';
+import { Controls } from '../input/Controls';
 
 const Home = () => {
     const [isRotating, setIsRotating] = useState(false);
@@ -17,7 +17,7 @@ const Home = () => {
         <section className="w-full h-screen relative">
             <Canvas
                 className={`w-full h-screen bg-transparent ${isRotating ? 'cursor-grabbing' : 'cursor-grab'}`}
-                camera={{ near: 0.1, far: 1000 }}
+                camera={{ near: 0.1, far: 1000, position: [0, 0, 3] }}
             >
                 <Suspense fallback={<Loader />}>
                     <directionalLight position={[1, 1, 1]} intensity={2} />
@@ -35,23 +35,19 @@ const Home = () => {
                         intensity={1}
                     />
                     <Bird />
-                    <Sky 
-                        // isRotating={isRotating}
-                    />
+                    <Sky />
                     <Island
                         position={islandScreenPosition}
                         scale={islandScale}
                         rotation={islandRotation}
-                        // isRotating={isRotating}
-                        // setIsRotating={setIsRotating}
                         setCurrentStage={setCurrentStage}
                     />
                     <Plane 
-                        // isRotating={isRotating}
                         scale={planeScale}
                         position={planePosition}
                         rotation={planeRotation}
                     />
+                    <Controls target={islandScreenPosition} />
                 </Suspense>
             </Canvas>
         </section>
