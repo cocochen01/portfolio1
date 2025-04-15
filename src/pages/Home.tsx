@@ -7,7 +7,9 @@ import { Controls } from '../input/Controls';
 import { BigPlanet } from '../models/BigPlanet';
 import { BlendFunction } from 'postprocessing';
 import { Vector2 } from 'three';
-import { KeplerPlanet } from '../models/Kepler186f';
+import { Kepler186f } from '../models/Kepler186f';
+import { Axes } from '../models/Axes';
+import { Kepler7b } from '../models/Kepler7b';
 
 const Home = () => {
     const [isRotating, setIsRotating] = useState(false);
@@ -21,7 +23,7 @@ const Home = () => {
             >
                 <EffectComposer>
                     <DepthOfField focusDistance={.015} focalLength={.007} bokehScale={1.5} height={500} />
-                    <Bloom luminanceThreshold={0} luminanceSmoothing={.01} height={100} mipmapBlur={true} intensity={.8}/>
+                    <Bloom luminanceThreshold={0} luminanceSmoothing={0.9} height={200} mipmapBlur={false} intensity={2}/>
                     <Noise opacity={0.05} />
                     <Vignette eskil={true} offset={.5} darkness={1.1} />
                     <ChromaticAberration
@@ -39,18 +41,24 @@ const Home = () => {
                         groundColor={0x000000}
                         intensity={1}
                     />
-                    <KeplerPlanet
-                        position={[0, 0, 8]}
-                        scale={[.2, .2, .2]}
-                        rotation={[0, 0, 0]}
-                    />
                     <BigPlanet 
                         position={[0, 0, 0]}
                         scale={[5, 5, 5]}
-                        rotation={[0, 0, 0]}
+                        rotation={[0, -1, 0]}
                         setCurrentStage={setCurrentStage}
                     />
+                    <Kepler186f
+                        position={[-2 , 1, 8]}
+                        scale={[.2, .2, .2]}
+                        rotation={[0, 0, 0]}
+                    />
+                    <Kepler7b
+                        position={[7.5 , 1, 2]}
+                        scale={[.4, .4, .4]}
+                        rotation={[0, 0, 0]}
+                    />
                     <Controls target={[0, 0, 0]} />
+                    <Axes />
                 </Suspense>
             </Canvas>
         </section>
