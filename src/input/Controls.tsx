@@ -36,8 +36,6 @@ export function Controls ({ target }: { target: [number, number, number] }) {
       enableRotate={true}
       enablePan={false}
       enableZoom={false}
-    //   minPolarAngle={Math.PI / 3}
-    //   maxPolarAngle={Math.PI / 2}
       enableDamping={true}
       dampingFactor={0.025}
       rotateSpeed={0.3}

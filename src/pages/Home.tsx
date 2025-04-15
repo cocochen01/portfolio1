@@ -12,7 +12,6 @@ import { KeplerPlanet } from '../models/Kepler186f';
 const Home = () => {
     const [isRotating, setIsRotating] = useState(false);
     const [currentStage, setCurrentStage] = useState(1);
-    // const [planeScale, planePosition, planeRotation] = adjustPlaneForScreenSize();
     return (
         <section className="w-full h-screen relative">
             <Canvas
