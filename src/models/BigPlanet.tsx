@@ -46,8 +46,6 @@ export function BigPlanet(props: BigPlanetProps): JSX.Element {
               <group name="Clouds_1">
                 <mesh
                   name="Object_4"
-                  castShadow
-                  receiveShadow
                   geometry={nodes.Object_4.geometry}
                   material={materials.Clouds}
                 />
@@ -55,8 +53,6 @@ export function BigPlanet(props: BigPlanetProps): JSX.Element {
               <group name="Planet_2">
                 <mesh
                   name="Object_6"
-                  castShadow
-                  receiveShadow
                   geometry={nodes.Object_6.geometry}
                   material={materials.Planet}
                 />
