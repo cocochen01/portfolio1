@@ -26,10 +26,10 @@ type BigPlanetProps = {
     position: [number, number, number];
     scale: [number, number, number];
     rotation: [number, number, number];
-    setCurrentStage: React.Dispatch<React.SetStateAction<number>>;
+    // setCurrentStage: React.Dispatch<React.SetStateAction<number>>;
 };
 export function BigPlanet(props: BigPlanetProps): JSX.Element {
-  const { setCurrentStage, ...groupProps } = props;
+  const { ...groupProps } = props;
   const { nodes, materials } = useGLTF(bigPlanetScene) as GLTFResult;
   const bigPlanetRef = useRef<Group>(null);
   const { scene } = useThree();

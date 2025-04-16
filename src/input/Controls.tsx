@@ -2,7 +2,13 @@ import { OrbitControls } from '@react-three/drei';
 import { MOUSE } from 'three';
 import { useEffect, useRef } from 'react';
 
-export function Controls ({ target }: { target: [number, number, number] }) {
+type controlProps = {
+    target: [number, number, number];
+    setCurrentStage: React.Dispatch<React.SetStateAction<number>>;
+};
+
+export function Controls (props: controlProps) {
+  const { target, setCurrentStage } = props;
   const controlsRef = useRef<any>();
 
   useEffect(() => {
