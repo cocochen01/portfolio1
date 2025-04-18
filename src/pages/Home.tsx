@@ -14,7 +14,9 @@ import { HomeInfo } from '../components/HomeInfo';
 
 const Home = () => {
   const [isRotating, setIsRotating] = useState(false);
-  const [currentStage, setCurrentStage] = useState(1);
+  const [currentStage, setCurrentStage] = useState(-1);
+  const posKepler186f: [number, number, number] = [-2 , 1, 8];
+  const posKepler7b: [number, number, number] = [7.5 , 1, 2];
   return (
     <section className="w-full h-screen relative">
       <div className='absolute top-28 left-0 right-0 z-10 flex items-center justify-center'>
@@ -25,6 +27,11 @@ const Home = () => {
         camera={{ near: 0.1, far: 100, position: [0, 0, 10] }}
         style={{ background: '#04243c'}}
       >
+      <Controls
+        target={[0, 0, 0]}
+        stages={[posKepler186f, posKepler7b]}
+        setCurrentStage={setCurrentStage}
+      />
         <EffectComposer>
           <DepthOfField focusDistance={.015} focalLength={.007} bokehScale={1.5} height={500} />
           <Bloom luminanceThreshold={0} luminanceSmoothing={0.9} height={200} mipmapBlur={false} intensity={2}/>
@@ -51,18 +58,14 @@ const Home = () => {
             rotation={[0, -1, 0]}
           />
           <Kepler186f
-            position={[-2 , 1, 8]}
+            position={posKepler186f}
             scale={[.2, .2, .2]}
             rotation={[0, 0, 0]}
           />
           <Kepler7b
-            position={[7.5 , 1, 2]}
+            position={posKepler7b}
             scale={[.4, .4, .4]}
             rotation={[0, 0, 0]}
-          />
-          <Controls
-            target={[0, 0, 0]}
-            setCurrentStage={setCurrentStage}
           />
           <Axes />
         </Suspense>

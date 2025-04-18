@@ -1,39 +1,57 @@
 import { OrbitControls } from '@react-three/drei';
-import { MOUSE } from 'three';
-import { useEffect, useRef } from 'react';
+import { MOUSE, Vector3 } from 'three';
+import { useEffect, useMemo, useRef } from 'react';
+import { useFrame, useThree } from '@react-three/fiber';
 
-type controlProps = {
-    target: [number, number, number];
-    setCurrentStage: React.Dispatch<React.SetStateAction<number>>;
+type ControlProps = {
+  target: [number, number, number];
+  stages: [number, number, number][];
+  setCurrentStage: React.Dispatch<React.SetStateAction<number>>;
 };
 
-export function Controls (props: controlProps) {
-  const { target, setCurrentStage } = props;
+export function Controls(props: ControlProps) {
+  const { target, stages, setCurrentStage } = props;
   const controlsRef = useRef<any>();
+  const { camera } = useThree();
+  const currentStageRef = useRef<number>(-1);
+  const frameCountRef = useRef<number>(0);
 
-  useEffect(() => {
-    const handleKeyDown = (event: KeyboardEvent) => {
-      if (!controlsRef.current) return;
+  const targetVec = useMemo(() => new Vector3(...target), []);
 
-      const ROTATE_STEP = 0.05;
+  const stageDirections = useMemo(() => {
+    return stages.map(stage => {
+      const stagePos = new Vector3(...stage);
+      return targetVec.clone().sub(stagePos).normalize();
+    });
+  }, [stages]);
 
-      switch (event.code) {
-        case 'ArrowLeft':
-          controlsRef.current.setAzimuthalAngle(
-            controlsRef.current.getAzimuthalAngle() - ROTATE_STEP
-          );
-          break;
-        case 'ArrowRight':
-          controlsRef.current.setAzimuthalAngle(
-            controlsRef.current.getAzimuthalAngle() + ROTATE_STEP
-          );
-          break;
+  const directionThreshold = 0.98;
+  const camDir = useRef(new Vector3());
+
+  useFrame(() => {
+    frameCountRef.current++;
+    if (frameCountRef.current % 10 !== 0) return;
+
+    camDir.current.subVectors(targetVec, camera.position).normalize();
+
+    for (let i = 0; i < stageDirections.length; i++) {
+      const dot = camDir.current.dot(stageDirections[i]);
+      if (dot > directionThreshold) {
+        if (i !== currentStageRef.current) {
+          currentStageRef.current = i;
+          setCurrentStage(i);
+          console.log(`Switched to stage ${i}`);
+        }
+        return;
       }
-    };
+    }
 
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, []);
+    if (currentStageRef.current !== -1) {
+      currentStageRef.current = -1;
+      setCurrentStage(-1);
+      console.log('Switched to stage -1 (no stage)');
+    }
+  });
 
   return (
     <OrbitControls
