@@ -1,6 +1,6 @@
 import { OrbitControls } from '@react-three/drei';
 import { MOUSE, Vector3 } from 'three';
-import { useEffect, useMemo, useRef } from 'react';
+import { useMemo, useRef } from 'react';
 import { useFrame, useThree } from '@react-three/fiber';
 
 type ControlProps = {

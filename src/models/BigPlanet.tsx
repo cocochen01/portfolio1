@@ -26,7 +26,6 @@ type BigPlanetProps = {
     position: [number, number, number];
     scale: [number, number, number];
     rotation: [number, number, number];
-    // setCurrentStage: React.Dispatch<React.SetStateAction<number>>;
 };
 export function BigPlanet(props: BigPlanetProps): JSX.Element {
   const { ...groupProps } = props;
@@ -34,7 +33,7 @@ export function BigPlanet(props: BigPlanetProps): JSX.Element {
   const bigPlanetRef = useRef<Group>(null);
   const { scene } = useThree();
   useEffect(() => {
-      scene.fog = null;
+    scene.fog = null;
   }, [scene]);
 
   return (
