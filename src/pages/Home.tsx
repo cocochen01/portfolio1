@@ -31,6 +31,7 @@ const Home = () => {
         target={[0, 0, 0]}
         stages={[posKepler186f, posKepler7b]}
         setCurrentStage={setCurrentStage}
+        setIsRotating={setIsRotating}
       />
         <EffectComposer>
           <DepthOfField focusDistance={.015} focalLength={.007} bokehScale={1.5} height={500} />

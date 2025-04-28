@@ -1,18 +1,20 @@
-import { OrbitControls } from '@react-three/drei';
-import { MOUSE, Vector3 } from 'three';
-import { useMemo, useRef } from 'react';
-import { useFrame, useThree } from '@react-three/fiber';
+import { useThree, useFrame } from "@react-three/fiber";
+import { OrbitControls } from "@react-three/drei";
+import { MOUSE } from "three";
+import { Vector3 } from "three";
+import { useMemo, useRef } from "react";
 
 type ControlProps = {
   target: [number, number, number];
   stages: [number, number, number][];
   setCurrentStage: React.Dispatch<React.SetStateAction<number>>;
+  setIsRotating: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 export function Controls(props: ControlProps) {
-  const { target, stages, setCurrentStage } = props;
-  const controlsRef = useRef<any>();
+  const { target, stages, setCurrentStage, setIsRotating } = props;
   const { camera } = useThree();
+  const controlsRef = useRef<any>();
   const currentStageRef = useRef<number>(-1);
   const frameCountRef = useRef<number>(0);
 
@@ -23,7 +25,7 @@ export function Controls(props: ControlProps) {
       const stagePos = new Vector3(...stage);
       return targetVec.clone().sub(stagePos).normalize();
     });
-  }, [stages]);
+  }, [stages, targetVec]);
 
   const directionThreshold = 0.98;
   const camDir = useRef(new Vector3());
@@ -64,8 +66,10 @@ export function Controls(props: ControlProps) {
       dampingFactor={0.025}
       rotateSpeed={0.3}
       mouseButtons={{
-        LEFT: MOUSE.ROTATE
-    }}
+        LEFT: MOUSE.ROTATE,
+      }}
+      onStart={() => setIsRotating(true)}
+      onEnd={() => setIsRotating(false)}
     />
   );
-};
+}
